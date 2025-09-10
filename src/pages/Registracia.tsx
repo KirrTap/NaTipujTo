@@ -103,7 +103,7 @@ const Registracia: React.FC = () => {
             onMouseOver={e => (e.currentTarget.style.background = '#9a2323')}
             onMouseOut={e => (e.currentTarget.style.background = '#d32f2f')}
           >
-            Späť na úvod
+            Späť
           </button>
         </div>
       </form>
