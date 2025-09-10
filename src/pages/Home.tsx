@@ -25,14 +25,18 @@ const Home: React.FC = () => {
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', width: '100%', maxWidth: 320 }}>
         <button
-          style={{ width: '100%', padding: '16px 0', fontSize: '1.1rem', borderRadius: 8, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer', fontWeight: 600 }}
+          style={{ width: '100%', padding: '16px 0', fontSize: '1.1rem', borderRadius: 8, border: 'none', background: '#1976d2', color: '#fff', cursor: 'pointer', fontWeight: 600, transition: 'background 0.2s' }}
           onClick={() => navigate('/prihlasenie')}
+          onMouseOver={e => (e.currentTarget.style.background = '#115293')}
+          onMouseOut={e => (e.currentTarget.style.background = '#1976d2')}
         >
           Prihlásiť sa
         </button>
         <button
-          style={{ width: '100%', padding: '16px 0', fontSize: '1.1rem', borderRadius: 8, border: 'none', background: '#43a047', color: '#fff', cursor: 'pointer', fontWeight: 600 }}
+          style={{ width: '100%', padding: '16px 0', fontSize: '1.1rem', borderRadius: 8, border: 'none', background: '#43a047', color: '#fff', cursor: 'pointer', fontWeight: 600, transition: 'background 0.2s' }}
           onClick={() => navigate('/registracia')}
+          onMouseOver={e => (e.currentTarget.style.background = '#2e7031')}
+          onMouseOut={e => (e.currentTarget.style.background = '#43a047')}
         >
           Zaregistrovať sa
         </button>
