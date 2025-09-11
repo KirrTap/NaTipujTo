@@ -21,7 +21,7 @@ const MyTips: React.FC = () => {
 
         const { data: tipsData } = await supabase
           .from('tips')
-          .select('id, tip_h, tip_a, matches(home_team, away_team, date)')
+          .select('match_id, tip_h, tip_a, matches(home_team, away_team, date)')
           .eq('username', profile.name)
           .is('points', null);
           // .order('matches.date', { ascending: true });
