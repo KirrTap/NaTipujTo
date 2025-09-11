@@ -32,7 +32,7 @@ const ZapasCard: React.FC<ZapasCardProps> = ({ home_team, away_team, date }) => 
     <div style={{
       maxWidth: 340,
       margin: '16px auto',
-      border: '2px solid #1976d2',
+      border: '2px solid #1976d2ff',
       borderRadius: 16,
       background: '#fff',
       boxShadow: '0 2px 8px rgba(0,0,0,0.08)',

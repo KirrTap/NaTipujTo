@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { supabase } from '../supabaseClient';
+
 const menuItems = [
   { label: 'Zápasy', path: '/matches' },
   { label: 'Moje tipy', path: '/my-tips' },
@@ -8,33 +10,41 @@ const menuItems = [
 ];
 
 const HamburgerMenu: React.FC = () => {
+  const handleLogout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    await supabase.auth.signOut();
+    Object.keys(localStorage)
+      .filter((k) => k.startsWith('sb-'))
+      .forEach((k) => localStorage.removeItem(k));
+    window.location.href = '/';
+  };
   const [open, setOpen] = useState(false);
 
   return (
     <>
-  <div style={{ position: 'absolute', top: 18, right: 18, zIndex: 100 }}>
-        <button
-          aria-label="menu"
-          onClick={() => setOpen(!open)}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            width: 36,
-            height: 36,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-        >
-          <div style={{ width: 28, height: 22, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            {[0,1,2].map(i => (
-              <div key={i} style={{ height: 4, borderRadius: 2, background: '#1976d2', width: '100%' }} />
-            ))}
-          </div>
-        </button>
+  <div style={{ position: open ? 'fixed' : 'absolute', top: 0, right: 18, zIndex: 100, height: 60, display: 'flex', alignItems: 'center' }}>
+    <button
+      aria-label="menu"
+      onClick={() => setOpen(!open)}
+      style={{
+        background: 'none',
+        border: 'none',
+        cursor: 'pointer',
+        padding: 0,
+        width: 36,
+        height: 36,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <div style={{ width: 28, height: 22, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {[0,1,2].map(i => (
+          <div key={i} style={{ height: 4, borderRadius: 2, background: '#1976d2', width: '100%' }} />
+        ))}
       </div>
+    </button>
+  </div>
       <div
         style={{
           position: 'fixed',
@@ -69,6 +79,21 @@ const HamburgerMenu: React.FC = () => {
             {item.label}
           </a>
         ))}
+        <a
+          href="/"
+          style={{
+            padding: '16px 24px',
+            fontSize: 17,
+            color: '#d32f2f',
+            textDecoration: 'none',
+            fontWeight: 500,
+            borderBottom: '1px solid #eee',
+            cursor: 'pointer'
+          }}
+          onClick={handleLogout}
+        >
+          Odhlásiť
+        </a>
       </div>
     </>
   );
