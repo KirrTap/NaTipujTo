@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 
 const teamLogos: Record<string, string> = {
@@ -16,43 +16,52 @@ const teamLogos: Record<string, string> = {
   'HC PO': 'https://www.hokejportal.net/hp/kluby/PRE.png?202508b'
 };
 
-interface ZapasCardProps {
+interface TipsMatchCardProps {
+  id: number;
   home_team: string;
   away_team: string;
-  date: string; // ISO string
-  match_id: number;
-  username: string;
-  onTip?: () => void;
-};
+  date: string;
+  tip_h: number;
+  tip_a: number;
+  onUpdate?: () => void;
+}
 
-const ZapasCard: React.FC<ZapasCardProps> = ({ home_team, away_team, date, match_id, username, onTip }) => {
-  const [tipH, setTipH] = React.useState('');
-  const [tipA, setTipA] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
+const TipsMatchCard: React.FC<TipsMatchCardProps> = ({
+  id,
+  home_team,
+  away_team,
+  date,
+  tip_h,
+  tip_a,
+  onUpdate
+}) => {
+  const homeLogo = teamLogos[home_team] || '/images/default.png';
+  const awayLogo = teamLogos[away_team] || '/images/default.png';
   const formattedDate = new Date(date).toLocaleString('sk-SK', {
     day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
   });
-  const homeLogo = teamLogos[home_team] || '/images/default.png';
-  const awayLogo = teamLogos[away_team] || '/images/default.png';
 
-  const handleTip = async () => {
-    if (!tipH || !tipA || isNaN(Number(tipH)) || isNaN(Number(tipA))) return;
+  const [localTipH, setLocalTipH] = useState(String(tip_h));
+  const [localTipA, setLocalTipA] = useState(String(tip_a));
+  const [loading, setLoading] = useState(false);
+
+  // Zisti či zápas už začal
+  const matchStarted = new Date(date) <= new Date();
+
+  const handleUpdate = async () => {
     setLoading(true);
-    await supabase.from('tips').insert({
-      match_id,
-      username,
-      tip_h: Number(tipH),
-      tip_a: Number(tipA),
-      tiped_at: new Date().toISOString(),
-      points: null
-    });
+    await supabase
+      .from('tips')
+      .update({
+        tip_h: Number(localTipH),
+        tip_a: Number(localTipA)
+      })
+      .eq('id', id);
     setLoading(false);
-    setTipH('');
-    setTipA('');
-    if (onTip) onTip();
+    if (onUpdate) onUpdate();
   };
 
-  return (
+return (
     <div style={{
       maxWidth: 340,
       margin: '16px auto',
@@ -71,42 +80,56 @@ const ZapasCard: React.FC<ZapasCardProps> = ({ home_team, away_team, date, match
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: 110, gap: 6, justifyContent: 'center' }}>
           <div style={{ fontWeight: 500, fontSize: 14 }}>{home_team}</div>
           <img src={homeLogo} alt={home_team} style={{ width: 40, height: 40, objectFit: 'contain' }} />
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                maxLength={2}
-                style={{ width: 36, padding: 4, fontSize: 15, textAlign: 'center', borderRadius: 6, border: '1px solid #bbb' }}
-                value={tipH}
-                onChange={e => setTipH(e.target.value.replace(/[^0-9]/g, ''))}
-              />
+          <input
+            type="text"
+            value={localTipH}
+            onChange={e => setLocalTipH(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
+            style={{
+              width: 32,
+              padding: 4,
+              fontSize: 16,
+              textAlign: 'center',
+              borderRadius: 6,
+              border: '1px solid #bbb',
+              background: '#fff',
+            }}
+            disabled={matchStarted}
+          />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 40 }}>
           <span style={{ fontWeight: 600, fontSize: 22, display: 'inline-block', width: 18, textAlign: 'center' }}>:</span>
         </div>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: 110, gap: 6, justifyContent: 'center' }}>
-              <input
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                maxLength={2}
-                style={{ width: 36, padding: 4, fontSize: 15, textAlign: 'center', borderRadius: 6, border: '1px solid #bbb' }}
-                value={tipA}
-                onChange={e => setTipA(e.target.value.replace(/[^0-9]/g, ''))}
-              />
+            <input
+              type="text"
+              value={localTipA}
+              onChange={e => setLocalTipA(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))}
+              style={{
+                width: 32,
+                padding: 4,
+                fontSize: 16,
+                textAlign: 'center',
+                borderRadius: 6,
+                border: '1px solid #bbb',
+                background: '#fff',
+              }}
+              disabled={matchStarted}
+            />
           <img src={awayLogo} alt={away_team} style={{ width: 40, height: 40, objectFit: 'contain' }} />
           <div style={{ fontWeight: 500, fontSize: 14 }}>{away_team}</div>
         </div>
       </div>
-          <button
-            style={{ marginTop: 8, padding: '6px 16px', borderRadius: 7, background: '#1976d2', color: 'white', border: 'none', fontSize: 14, fontWeight: 600, cursor: loading ? 'wait' : 'pointer', minWidth: 70 }}
-            onClick={handleTip}
-            disabled={loading}
-          >
-            {loading ? 'Ukladám...' : 'Tip'}
-          </button>
+          {!matchStarted && (
+            <button
+              style={{ marginTop: 8, padding: '6px 16px', borderRadius: 7, background: '#1976d2', color: 'white', border: 'none', fontSize: 14, fontWeight: 600, cursor: loading ? 'wait' : 'pointer', minWidth: 70 }}
+              disabled={loading}
+              onClick={handleUpdate}
+            >
+              {loading ? 'Aktualizujem...' : 'Aktualizovať'}
+            </button>
+          )}
     </div>
   );
 };
 
-export default ZapasCard;
+export default TipsMatchCard;

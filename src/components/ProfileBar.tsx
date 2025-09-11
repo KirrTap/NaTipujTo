@@ -1,15 +1,6 @@
 import React from 'react';
-import { supabase } from '../supabaseClient';
 
 const ProfileBar: React.FC<{ name: string }> = ({ name }) => {
-  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    await supabase.auth.signOut();
-    Object.keys(localStorage)
-      .filter((k) => k.startsWith('sb-'))
-      .forEach((k) => localStorage.removeItem(k));
-    window.location.href = '/';
-  };
 
   return (
     <div style={{
