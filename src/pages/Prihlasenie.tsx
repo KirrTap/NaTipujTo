@@ -21,7 +21,7 @@ const Prihlasenie: React.FC = () => {
     });
 
     if (signInError) {
-      setError(signInError.message);
+      setError('Email alebo heslo je nesprávne.');
       return;
     }
 
@@ -38,7 +38,7 @@ const Prihlasenie: React.FC = () => {
         return;
       }
   setMeno(profile.name);
-  navigate('/first');
+  navigate('/matches');
     }
   };
 

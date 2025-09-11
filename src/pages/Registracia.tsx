@@ -31,7 +31,13 @@ const Registracia: React.FC = () => {
     });
 
     if (signUpError) {
-      setError(signUpError.message);
+      if (signUpError.message.includes('Password should be at least 6 characters')) {
+        setError('Heslo musí mať aspoň 6 znakov.');
+      } else if (signUpError.message.includes('already registered')) {
+        setError('Tento email je už registrovaný.');
+      } else {
+        setError('Chyba pri registrácii: ' + signUpError.message);
+      }
       return;
     }
 
@@ -39,7 +45,7 @@ const Registracia: React.FC = () => {
     if (user) {
       const { error: profileError } = await supabase
         .from('profiles')
-        .insert([{ id: user.id, name: meno }]);
+        .insert([{ id: user.id, name: meno, role: 'player', points: 0 }]);
       if (profileError) {
         setError(profileError.message);
         return;
@@ -105,6 +111,8 @@ const Registracia: React.FC = () => {
           >
             Späť
           </button>
+          {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
+          {success && <div style={{ color: 'green', marginTop: 8 }}>{success}</div>}
         </div>
       </form>
     </div>
