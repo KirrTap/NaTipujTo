@@ -41,20 +41,26 @@ const MyTips: React.FC = () => {
       <ProfileBar name={meno} />
       <div style={{ textAlign: 'center', marginTop: '24px', padding: '0 8px' }}>
         <div style={{ marginTop: 32 }}>
-          {tips
-            .sort((a, b) => new Date(b.matches?.date).getTime() - new Date(a.matches?.date).getTime())
-            .map((tip) => (
-              <TipsMatchCard
-                key={tip.id}
-                id={tip.id}
-                home_team={tip.matches?.home_team}
-                away_team={tip.matches?.away_team}
-                date={tip.matches?.date}
-                tip_h={tip.tip_h}
-                tip_a={tip.tip_a}
-                onUpdate={fetchTips}
-              />
-          ))}
+          {tips.length === 0 ? (
+            <div style={{ fontSize: 17, color: '#888', fontWeight: 500, marginTop: 24 }}>
+              Nemáte žiadne natipované zápasy.
+            </div>
+          ) : (
+            tips
+              .sort((a, b) => new Date(b.matches?.date).getTime() - new Date(a.matches?.date).getTime())
+              .map((tip) => (
+                <TipsMatchCard
+                  key={tip.id}
+                  id={tip.id}
+                  home_team={tip.matches?.home_team}
+                  away_team={tip.matches?.away_team}
+                  date={tip.matches?.date}
+                  tip_h={tip.tip_h}
+                  tip_a={tip.tip_a}
+                  onUpdate={fetchTips}
+                />
+            ))
+          )}
         </div>
       </div>
     </>

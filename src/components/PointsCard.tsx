@@ -44,7 +44,7 @@ const PointsCard: React.FC<PointsCardProps> = ({
     <div style={{
       maxWidth: 340,
       margin: '16px auto',
-      border: '2px solid #43a047',
+      border: points === 0 ? '2px solid #d32f2f' : '2px solid #43a047',
       borderRadius: 16,
       background: '#fff',
       boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
@@ -98,7 +98,7 @@ const PointsCard: React.FC<PointsCardProps> = ({
       </div>
       <div style={{
         marginTop: 12,
-        background: '#43a047',
+        background: points === 0 ? '#d32f2f' : '#43a047',
         color: 'white',
         borderRadius: '50%',
         width: 32,
