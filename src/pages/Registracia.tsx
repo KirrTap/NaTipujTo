@@ -45,7 +45,7 @@ const Registracia: React.FC = () => {
     if (user) {
       const { error: profileError } = await supabase
         .from('profiles')
-        .insert([{ id: user.id, name: meno, role: 'player}]);
+        .insert([{ id: user.id, name: meno, role: 'player'}]);
       if (profileError) {
         setError(profileError.message);
         return;
