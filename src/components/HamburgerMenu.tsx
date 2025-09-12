@@ -19,6 +19,24 @@ const HamburgerMenu: React.FC = () => {
     window.location.href = '/';
   };
   const [open, setOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  React.useEffect(() => {
+    const checkAdmin = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+        if (profile && profile.role === 'admin') {
+          setIsAdmin(true);
+        }
+      }
+    };
+    checkAdmin();
+  }, []);
 
   return (
     <>
@@ -79,6 +97,24 @@ const HamburgerMenu: React.FC = () => {
             {item.label}
           </a>
         ))}
+        {isAdmin && (
+          <a
+            href="/admin"
+            style={{
+              padding: '16px 24px',
+              fontSize: 17,
+              color: '#388e3c',
+              textDecoration: 'none',
+              fontWeight: 500,
+              borderBottom: '1px solid #eee',
+              cursor: 'pointer',
+              background: '#e8f5e9'
+            }}
+            onClick={() => setOpen(false)}
+          >
+            Admin Panel
+          </a>
+        )}
         <a
           href="/"
           style={{
