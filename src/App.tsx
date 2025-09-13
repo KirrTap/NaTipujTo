@@ -20,7 +20,7 @@ function App() {
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/points" element={<Points />} />
         <Route path="/admin" element={
-          <ProtectedRoute>
+          <ProtectedRoute adminOnly>
             <Admin />
           </ProtectedRoute>
         } />
