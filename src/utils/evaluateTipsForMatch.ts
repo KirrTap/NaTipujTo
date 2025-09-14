@@ -56,8 +56,8 @@ export async function evaluateTipsForMatch(matchId: number) {
           .eq('id', tip.id);
         continue;
       }
-      // 4. Trafí len rozdiel alebo súčet (ale nie víťaza)
-      if ((tipDiff === resDiff || tipSum === resSum)) {
+      // 4. Trafí len súčet (ale nie víťaza)
+      if (tipSum === resSum) {
         await supabase
           .from('tips')
           .update({ points: 2 })
