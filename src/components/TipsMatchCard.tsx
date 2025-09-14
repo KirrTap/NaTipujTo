@@ -42,7 +42,8 @@ const TipsMatchCard: React.FC<TipsMatchCardProps> = ({
       .from('tips')
       .update({
         tip_h: Number(localTipH),
-        tip_a: Number(localTipA)
+        tip_a: Number(localTipA),
+        tiped_at: new Date().toISOString()
       })
       .eq('id', id);
     setLoading(false);
