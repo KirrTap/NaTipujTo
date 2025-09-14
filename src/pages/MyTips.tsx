@@ -22,7 +22,7 @@ const MyTips: React.FC = () => {
 
         const { data: tipsData } = await supabase
           .from('tips')
-          .select('match_id, tip_h, tip_a, matches(home_team, away_team, date, kolo)')
+          .select('id, match_id, tip_h, tip_a, matches(home_team, away_team, date, kolo)')
           .eq('username', profile.name)
           .is('points', null);
           // .order('matches.date', { ascending: true });
@@ -48,7 +48,12 @@ const MyTips: React.FC = () => {
             </div>
           ) : (
             tips
-              .sort((a, b) => new Date(b.matches?.date).getTime() - new Date(a.matches?.date).getTime())
+              .sort((a, b) => {
+                const dateA = new Date(a.matches?.date).getTime();
+                const dateB = new Date(b.matches?.date).getTime();
+                if (dateA !== dateB) return dateB - dateA;
+                return b.match_id - a.match_id;
+              })    
               .map((tip) => (
                 <TipsMatchCard
                   key={tip.id}
