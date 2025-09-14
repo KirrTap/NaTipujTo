@@ -1,31 +1,18 @@
 import React from 'react';
 import { supabase } from '../supabaseClient';
-
-const teamLogos: Record<string, string> = {
-  'HC KE': 'https://www.hokejportal.net/hp/kluby/KOS.png?202508b',
-  'HK SNV': 'https://www.hokejportal.net/hp/kluby/SNV.png?202508b',
-  'HK NR': 'https://www.hokejportal.net/hp/kluby/NIT.png?202508b',
-  'HC ZA': 'https://www.hokejportal.net/hp/kluby/ZIL.png?202508b',
-  'HC BB': 'https://www.hokejportal.net/hp/kluby/BBY.png?202508b',
-  'HK PP': 'https://www.hokejportal.net/hp/kluby/POP.png?202508b',
-  'HC BA': 'https://www.hokejportal.net/hp/kluby/SBA.png?202508b',
-  'HK TN': 'https://www.hokejportal.net/hp/kluby/TRE.png?202508b',
-  'HK MI': 'https://www.hokejportal.net/hp/kluby/MIC.png?202508b',
-  'HKM ZV': 'https://www.hokejportal.net/hp/kluby/ZVO.png?202508b',
-  'HK LM': 'https://www.hokejportal.net/hp/kluby/LMI.png?202508b',
-  'HC PO': 'https://www.hokejportal.net/hp/kluby/PRE.png?202508b'
-};
+import { teamLogos } from '../constants/teamLogos';
 
 interface ZapasCardProps {
   home_team: string;
   away_team: string;
-  date: string; // ISO string
+  date: string;
   match_id: number;
   username: string;
+  kolo: number;
   onTip?: () => void;
-};
+}
 
-const ZapasCard: React.FC<ZapasCardProps> = ({ home_team, away_team, date, match_id, username, onTip }) => {
+const ZapasCard: React.FC<ZapasCardProps> = ({ home_team, away_team, date, match_id, username, kolo, onTip }) => {
   const [tipH, setTipH] = React.useState('');
   const [tipA, setTipA] = React.useState('');
   const [loading, setLoading] = React.useState(false);
@@ -66,6 +53,19 @@ const ZapasCard: React.FC<ZapasCardProps> = ({ home_team, away_team, date, match
       alignItems: 'center',
       gap: 10
     }}>
+      <div style={{
+        display: 'inline-block',
+        background: '#e3f2fd',
+        color: '#1976d2',
+        borderRadius: 12,
+        padding: '2px 12px',
+        fontWeight: 600,
+        fontSize: 14,
+        marginBottom: 4,
+        letterSpacing: 1
+      }}>
+        {kolo}. kolo
+      </div>
       <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 8 }}>{formattedDate}</div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, width: '100%' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: 110, gap: 6, justifyContent: 'center' }}>

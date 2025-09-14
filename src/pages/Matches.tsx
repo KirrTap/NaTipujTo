@@ -34,7 +34,7 @@ const Matches: React.FC = () => {
     // Načítaj zápasy z databázy
     const { data: matches } = await supabase
       .from('matches')
-      .select('id, home_team, away_team, date')
+      .select('id, home_team, away_team, date, kolo')
       .order('date', { ascending: true });
     if (matches) setZapasy(matches);
   };
@@ -64,6 +64,7 @@ const Matches: React.FC = () => {
                 date={zapas.date}
                 match_id={zapas.id}
                 username={meno}
+                kolo={zapas.kolo}
                 onTip={fetchProfileAndMatches}
               />
             ))}

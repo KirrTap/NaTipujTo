@@ -21,7 +21,7 @@ const Points: React.FC = () => {
 
         const { data: tipsData } = await supabase
           .from('tips')
-          .select('id, tip_h, tip_a, points, matches(home_team, away_team, date)')
+          .select('id, tip_h, tip_a, points, matches(home_team, away_team, date, kolo)')
           .eq('username', profile.name)
           .not('points', 'is', null);
 
@@ -51,6 +51,7 @@ const Points: React.FC = () => {
                 date={tip.matches?.date}
                 tip_h={tip.tip_h}
                 tip_a={tip.tip_a}
+                kolo={tip.matches?.kolo}
                 points={tip.points}
               />
           ))}
