@@ -3,7 +3,7 @@ import HamburgerMenu from '../components/HamburgerMenu';
 import { supabase } from '../supabaseClient';
 import AdminCard from '../components/AdminCard';
 
-const Admin: React.FC = () => {
+const AdminResult: React.FC = () => {
   const [zapasy, setZapasy] = useState<any[]>([]);
 
   const fetchMatches = async () => {
@@ -44,4 +44,4 @@ const Admin: React.FC = () => {
   );
 };
 
-export default Admin;
+export default AdminResult;

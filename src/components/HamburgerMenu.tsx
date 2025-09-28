@@ -99,7 +99,7 @@ const HamburgerMenu: React.FC = () => {
         ))}
         {isAdmin && (
           <a
-            href="/admin"
+            href="/adminpanel"
             style={{
               padding: '16px 24px',
               fontSize: 17,

@@ -8,7 +8,9 @@ import FirstPage from './pages/Matches';
 import ProtectedRoute from './components/ProtectedRoute';
 import MyTips from './pages/MyTips';
 import Points from './pages/Points';
-import Admin from './pages/Admin';
+import AdminPanel from './pages/AdminPanel';
+import AdminMatch from './pages/AdminMatch';
+import AdminResult from './pages/AdminResult';
 import Ranking from './pages/Ranking';
 
 function App() {
@@ -19,9 +21,19 @@ function App() {
         <Route path="/my-tips" element={<MyTips />} />
         <Route path="/ranking" element={<Ranking />} />
         <Route path="/points" element={<Points />} />
-        <Route path="/admin" element={
+        <Route path="/adminpanel" element={
           <ProtectedRoute adminOnly>
-            <Admin />
+            <AdminPanel />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin-result" element={
+          <ProtectedRoute adminOnly>
+            <AdminResult />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin-match" element={
+          <ProtectedRoute adminOnly>
+            <AdminMatch />
           </ProtectedRoute>
         } />
         <Route path="/prihlasenie" element={<Prihlasenie />} />
